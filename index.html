@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第五英裕丸｜ドック修繕管理</title>
+<style>
+:root{--blue:#1459a6;--bg:#f3f5f8;--line:#e2e7ee;--muted:#657386}*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;color:#17212f}.top{background:linear-gradient(135deg,#123f73,#1768b5);color:white;padding:22px 18px 20px}.eyebrow{font-size:12px;opacity:.82}.top h1{font-size:22px;margin:5px 0}.top p{font-size:13px;margin:0;opacity:.85}.wrap{max-width:720px;margin:auto;padding:14px}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}.stat,.panel,.item{background:white;border:1px solid var(--line);border-radius:13px}.stat{padding:11px;text-align:center}.stat b{display:block;font-size:20px}.stat small{color:var(--muted);font-size:11px}.tabs{display:flex;gap:8px;margin-bottom:12px}.tab{flex:1;border:1px solid #cbd5e1;border-radius:10px;background:white;padding:12px;font-weight:700;color:#40516a}.tab.active{background:var(--blue);border-color:var(--blue);color:white}.tools{display:flex;gap:8px;margin-bottom:12px}.tools input{flex:1;min-width:0;border:1px solid #cbd5e1;border-radius:10px;padding:10px;font-size:14px}.tools select{border:1px solid #cbd5e1;border-radius:10px;padding:10px;background:white}.list{display:grid;gap:9px}.item{padding:13px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start}.num{font-size:11px;color:var(--muted);font-weight:700}.item h3{font-size:15px;margin:3px 0 5px}.desc{font-size:12px;color:#536174;line-height:1.5}.pill{font-size:11px;border-radius:20px;padding:5px 9px;white-space:nowrap;background:#edf0f4;color:#536174}.pill.work{background:#fff1d6;color:#8a5600}.pill.done{background:#dff5e7;color:#17663a}.open{grid-column:1/-1;border:0;background:#f1f5f9;color:#1e4d80;border-radius:8px;padding:9px;font-weight:700;text-align:left}.panel{padding:15px;margin-bottom:14px}.panel h2{font-size:17px;margin:0 0 12px}.field{margin:12px 0}.field label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-bottom:6px}.field input,.field textarea,.field select{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:10px;font:inherit;background:white}.field textarea{min-height:75px;resize:vertical}.actions{display:flex;gap:8px}.btn{border:0;border-radius:9px;padding:11px 14px;font-weight:700}.primary{background:var(--blue);color:white}.secondary{background:#edf1f6;color:#334155}.photos{display:flex;gap:8px;flex-wrap:wrap}.thumb{width:84px;height:84px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}.hidden{display:none}.note{font-size:11px;color:var(--muted);line-height:1.5;margin:12px 2px}.back{border:0;background:none;color:var(--blue);font-weight:700;padding:0 0 12px}.empty{padding:25px;text-align:center;color:var(--muted);background:white;border-radius:12px}.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 12px}.sync{font-size:12px;color:#17663a}.sync.err{color:#b42318}.add{border:0;border-radius:9px;background:#e5eef9;color:#174d83;padding:10px 12px;font-weight:700}.btn:disabled{opacity:.55}
+</style>
+
+</head>
+<body>
+<header class="top"><div class="eyebrow">DOCK REPAIR MANAGEMENT</div><h1>第五英裕丸</h1><p>ドック修繕箇所一覧｜船・会社共有</p></header>
+<main class="wrap">
+<section class="summary"><div class="stat"><b id="countAll">--</b><small>登録項目</small></div><div class="stat"><b id="countWork">--</b><small>作業中</small></div><div class="stat"><b id="countDone">--</b><small>完了</small></div></section>
+<div id="listView">
+<div class="bar"><span id="syncState" class="sync">接続中…</span><button id="addItem" class="add">＋ 項目追加</button></div>
+<div class="tabs"><button class="tab active" data-side="左舷">左舷</button><button class="tab" data-side="右舷">右舷</button></div>
+<div class="tools"><input id="search" placeholder="修繕箇所を検索"><select id="filter"><option value="all">すべて</option><option>未着手</option><option>作業中</option><option>完了</option></select></div>
+<div class="list" id="items"></div>
+<p class="note">船と会社で共有するドック修繕管理ページです。編集用URLを持つ担当者のみ変更できます。</p>
+</div>
+<div id="detailView" class="hidden">
+<button class="back" id="back">← 一覧に戻る</button>
+<section class="panel"><div class="num" id="dNum"></div><h2 id="dTitle"></h2><div class="field"><label>修繕箇所</label><input id="dName" placeholder="修繕箇所を入力"></div><div class="field"><label>内容</label><textarea id="dContent"></textarea></div><div class="field"><label>進捗</label><select id="dStatus"><option>未着手</option><option>作業中</option><option>完了</option></select></div><div class="field"><label>備考</label><textarea id="dMemo"></textarea></div><div class="field"><label>写真</label><input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" multiple><div class="photos" id="photos"></div><p class="note">写真を選ぶと、保存時に圧縮してオンライン保存します。</p></div><div class="actions"><button class="btn primary" id="save">変更をオンライン保存</button><button class="btn secondary" id="cancel">戻る</button></div></section>
+</div></main>
+<script>
+const SUPABASE_URL='https://vzkhmfbrxjdkmsqekfqn.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_zxwbq7ByxcKOEe25mbbbKQ_vv620x41';
+const FUNCTION_URL=SUPABASE_URL+'/functions/v1/rapid-function';
+const EDIT_TOKEN=new URLSearchParams(location.hash.slice(1)).get('edit')||'';
+const IS_EDITOR=EDIT_TOKEN.length>0;
+
+let side='左舷',current=null,rows=[],previewFiles=[],photoUrls={};
+const $=id=>document.getElementById(id);
+function setSync(msg,isErr=false){$('syncState').textContent=msg;$('syncState').className='sync'+(isErr?' err':'')}
+function esc(x){return String(x||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function callApi(action,payload={},file=null){
+  const headers={'apikey':SUPABASE_PUBLISHABLE_KEY,'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY};
+  if(IS_EDITOR) headers['x-edit-token']=EDIT_TOKEN;
+  let body;
+  if(file){body=new FormData();body.append('action',action);body.append('item_id',String(payload.item_id||''));body.append('file',file,file.name);}
+  else {headers['Content-Type']='application/json';body=JSON.stringify({action,...payload});}
+  const res=await fetch(FUNCTION_URL,{method:'POST',headers,body});
+  const data=await res.json().catch(()=>({error:'サーバー応答を読み取れません'}));
+  if(!res.ok) throw new Error(data.error||('通信エラー '+res.status));
+  return data;
+}
+async function refreshPhotoUrls(){
+  const paths=rows.flatMap(r=>(Array.isArray(r.photos)?r.photos:[]).map(p=>p?.path).filter(Boolean));
+  photoUrls={};
+  if(!paths.length)return;
+  try{const result=await callApi('signed',{paths});(result.urls||[]).forEach(x=>{if(x.path&&x.signedUrl)photoUrls[x.path]=x.signedUrl;});}catch(e){console.warn('写真URL取得:',e.message)}
+}
+async function loadRows(){if(!IS_EDITOR){setSync('専用の編集URLからアクセスしてください',true);$('items').innerHTML='<div class="empty">船・会社で共有された専用URLを開いてください。</div>';return}setSync('データを読み込み中…');try{const result=await callApi('list');rows=result.data||[];await refreshPhotoUrls();setSync('編集可能・オンライン同期中');render()}catch(error){setSync('接続エラー：'+error.message,true);$('items').innerHTML='<div class="empty">データを読み込めませんでした。設定を確認してください。</div>'}}
+function counts(){$('countAll').textContent=rows.length;$('countWork').textContent=rows.filter(x=>x.status==='作業中').length;$('countDone').textContent=rows.filter(x=>x.status==='完了').length}
+function render(){const q=$('search').value.toLowerCase(),f=$('filter').value;const list=rows.filter(v=>v.side===side&&(!q||((v.title||'')+' '+(v.detail||'')+' '+(v.notes||'')).toLowerCase().includes(q))&&(f==='all'||v.status===f));$('items').innerHTML=list.map(v=>`<article class="item"><div><div class="num">No. ${v.item_no}</div><h3>${esc(v.title||'（追加項目）')}</h3>${v.detail?`<div class="desc">${esc(v.detail)}</div>`:''}${v.notes?`<div class="desc">備考：${esc(v.notes)}</div>`:''}</div><span class="pill ${v.status==='作業中'?'work':v.status==='完了'?'done':''}">${esc(v.status)}</span><button class="open" data-id="${v.id}">詳細・${IS_EDITOR?'編集':'閲覧'}　›</button></article>`).join('')||'<div class="empty">該当する項目がありません</div>';document.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>openDetail(b.dataset.id));counts()}
+function renderDetailPhotos(){const arr=Array.isArray(current?.photos)?current.photos:[];$('photos').innerHTML=arr.map(p=>{const u=photoUrls[p.path];return u?`<a href="${u}" target="_blank" rel="noopener"><img class="thumb" src="${u}" alt="修繕写真"></a>`:''}).join('');previewFiles.forEach(file=>{const im=document.createElement('img');im.className='thumb';im.src=URL.createObjectURL(file);$('photos').appendChild(im)})}
+function openDetail(id){current=rows.find(x=>x.id===id);if(!current)return;previewFiles=[];$('listView').classList.add('hidden');$('detailView').classList.remove('hidden');$('dNum').textContent=current.side+'｜No. '+current.item_no;$('dTitle').textContent=current.title||'追加項目';$('dName').value=current.title||'';$('dContent').value=current.detail||'';$('dStatus').value=current.status||'未着手';$('dMemo').value=current.notes||'';$('photoInput').value='';$('dName').disabled=!IS_EDITOR;$('dContent').disabled=!IS_EDITOR;$('dStatus').disabled=!IS_EDITOR;$('dMemo').disabled=!IS_EDITOR;$('photoInput').classList.toggle('hidden',!IS_EDITOR);$('save').classList.toggle('hidden',!IS_EDITOR);renderDetailPhotos()}
+function closeDetail(){$('detailView').classList.add('hidden');$('listView').classList.remove('hidden');current=null;previewFiles=[];render()}
+$('photoInput').onchange=e=>{previewFiles=[...e.target.files];renderDetailPhotos()};
+async function compressPhoto(file){
+  if(!file.type.startsWith('image/'))throw new Error('画像ファイルを選んでください');
+  const bitmap=await createImageBitmap(file);const max=1600;const scale=Math.min(1,max/Math.max(bitmap.width,bitmap.height));
+  const canvas=document.createElement('canvas');canvas.width=Math.round(bitmap.width*scale);canvas.height=Math.round(bitmap.height*scale);
+  canvas.getContext('2d').drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',0.78));
+  if(!blob)throw new Error('写真の圧縮に失敗しました');
+  const name=(file.name.replace(/\.[^.]+$/,'')||'photo')+'.webp';
+  return new File([blob],name,{type:'image/webp'});
+}
+$('save').onclick=async()=>{if(!current||!IS_EDITOR)return;const btn=$('save');btn.disabled=true;btn.textContent='保存中…';setSync('変更を保存中…');try{
+  const result=await callApi('update',{id:current.id,title:$('dName').value.trim(),detail:$('dContent').value,status:$('dStatus').value,notes:$('dMemo').value});
+  current=result.data;
+  for(const original of previewFiles){const compressed=await compressPhoto(original);await callApi('upload',{item_id:current.id},compressed);}
+  setSync('保存完了・オンライン同期中');await loadRows();const id=current.id;closeDetail();
+}catch(error){setSync('保存エラー：'+error.message,true);alert('保存できませんでした。\n'+error.message)}finally{btn.disabled=false;btn.textContent='変更をオンライン保存'}};
+$('cancel').onclick=closeDetail;$('back').onclick=closeDetail;
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{side=b.dataset.side;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));render()});$('search').oninput=render;$('filter').onchange=render;
+$('addItem').classList.toggle('hidden',!IS_EDITOR);
+$('addItem').onclick=async()=>{if(!IS_EDITOR)return;const nums=rows.filter(x=>x.side===side).map(x=>x.item_no);let n=1;while(nums.includes(n))n++;if(n>25){alert('この舷は25項目までです');return}try{const result=await callApi('create',{side,item_no:n});rows.push(result.data);render();openDetail(result.data.id)}catch(error){alert('追加できませんでした。\n'+error.message);setSync('追加エラー：'+error.message,true)}};
+loadRows();
+</script></body></html>
